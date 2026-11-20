@@ -1,0 +1,30 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: minio-learn
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 105MB
+  mvc:
+    async:
+      request-timeout: 300000
+
+learn:
+  minio:
+    # Silo 的 S3 API 在 9000；9001 是 Web 控制台，不能用于 SDK
+    endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MINIO_SECRET_KEY:minioadmin}
+    bucket: ${MINIO_BUCKET:learn-files}
+    console-url: ${MINIO_CONSOLE_URL:http://127.0.0.1:9001}
+    auto-create-bucket: ${MINIO_AUTO_CREATE_BUCKET:true}
+    fail-fast: ${MINIO_FAIL_FAST:false}
+    presign-default-seconds: 3600
+
+logging:
+  level:
+    com.venus.minio.learn: INFO
+    io.minio: WARN

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MinIO / Silo 学习控制台</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>MinIO / Silo 学习控制台</h1>
+    <p class="subtitle">S3 API 9000 · 原生控制台 9001 · 本页面 8080</p>
+  </div>
+  <a id="consoleLink" class="link" href="http://127.0.0.1:9001" target="_blank" rel="noreferrer">打开原生控制台 ↗</a>
+</header>
+
+<main class="layout">
+  <aside>
+    <section class="card">
+      <h2>连接</h2>
+      <dl class="kv">
+        <dt>S3 Endpoint</dt>
+        <dd id="cfgEndpoint">-</dd>
+        <dt>默认桶</dt>
+        <dd id="cfgBucket">-</dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>桶</h2>
+      <label class="field">
+        <span>当前桶</span>
+        <select id="bucketSelect"></select>
+      </label>
+      <div class="row">
+        <input id="newBucket" placeholder="new-bucket-name" autocomplete="off">
+        <button id="createBucketBtn" class="primary">创建</button>
+      </div>
+      <button id="refreshBucketsBtn" class="ghost wide">刷新桶列表</button>
+      <p class="hint">桶名只能使用小写字母、数字、点和连字符，长度 3–63。</p>
+    </section>
+
+    <section class="card">
+      <h2>上传对象</h2>
+      <input type="file" id="fileInput">
+      <input id="objectKey" placeholder="可选：自定义 key，如 docs/a.txt" autocomplete="off">
+      <button id="uploadBtn" class="primary wide">上传</button>
+      <p class="hint">最大 100MB；key 留空时使用文件名。</p>
+    </section>
+  </aside>
+
+  <section class="content">
+    <section class="card">
+      <div class="card-head">
+        <h2>对象列表</h2>
+        <div class="row">
+          <input id="prefixInput" placeholder="前缀，例如 docs/" autocomplete="off">
+          <button id="listBtn" class="ghost">查询</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr><th>Key</th><th>大小</th><th>修改时间</th><th>操作</th></tr>
+          </thead>
+          <tbody id="objectRows">
+          <tr><td colspan="4" class="empty">选择桶后点击查询</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>预签名 URL</h2>
+      <div class="row wrap">
+        <input id="presignKey" placeholder="对象 key" autocomplete="off">
+        <select id="presignMethod">
+          <option value="GET">GET（下载）</option>
+          <option value="PUT">PUT（上传）</option>
+        </select>
+        <select id="presignExpiry">
+          <option value="300">5 分钟</option>
+          <option value="3600" selected>1 小时</option>
+          <option value="86400">1 天</option>
+          <option value="604800">7 天（上限）</option>
+        </select>
+        <button id="presignBtn" class="primary">生成</button>
+      </div>
+      <div id="presignResult" class="presign hidden">
+        <textarea id="presignUrl" readonly rows="4"></textarea>
+        <div class="row">
+          <button id="copyPresignBtn" class="ghost">复制</button>
+          <a id="openPresignLink" class="link hidden" target="_blank" rel="noreferrer">打开（仅 GET）</a>
+        </div>
+        <p class="hint">浏览器直接 PUT 会触发 CORS，本页面只展示 URL；请用 curl 验证 PUT。</p>
+      </div>
+    </section>
+
+    <section class="card log-card">
+      <div class="card-head">
+        <h2>操作日志</h2>
+        <button id="clearLogBtn" class="ghost">清空</button>
+      </div>
+      <pre id="log"></pre>
+    </section>
+  </section>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>
